@@ -1,0 +1,105 @@
+Comandos para teste no swagger:
+
+# =============================
+#        USER ENDPOINTS
+# =============================
+
+# 1. Create Usuário
+POST http://localhost:8080/api/users
+
+{
+    "name": "Thomaz Bartol",
+    "email": "thomaz@bartol.com"
+}
+
+# 2. Pegar todos os usuários
+GET http://localhost:8080/api/users
+
+# 3. Alterar um usuário já existente
+PUT http://localhost:8080/api/users/GUID_DO_USUARIO
+
+{
+    "name": "Vinicius Souza",
+    "email": "vinicius@souza.com"
+}
+
+# 4. Deletar um usuário
+DELETE http://localhost:8080/api/users/GUID_DO_USUARIO
+
+
+# =============================
+#     SENSOR READING ENDPOINTS
+# =============================
+
+# 5. Criar leitura
+POST http://localhost:8080/api/readings
+
+{
+    "userId": "GUID_DO_USUARIO",
+    "temperature": 22.3,
+    "humidity": 45.1,
+    "light": 320.0
+}
+
+# 6. Criar leitura com valores nulos
+POST http://localhost:8080/api/readings
+
+{
+    "userId": "GUID_DO_USUARIO",
+    "temperature": null,
+    "humidity": null,
+    "light": 410.2
+}
+
+# 7. Exibir todas as leituras
+GET http://localhost:8080/api/readings
+
+# 8. Pegar todas as leituras filtradas por id e data
+GET http://localhost:8080/api/readings?userId=GUID_DO_USUARIO&startDate=2025-06-01&endDate=2025-06-08
+
+
+# =============================
+#        ALERT ENDPOINTS
+# =============================
+
+# 9. Criar alerta
+POST http://localhost:8080/api/alerts
+
+{
+    "userId": "GUID_DO_USUARIO",
+    "alertType": "Temperature",
+    "message": "High temperature detected"
+}
+
+# 10. Exibir todos os alertas
+GET http://localhost:8080/api/alerts
+
+# 11. Exibir alertas filtrado pelo id e pelo tipo
+GET http://localhost:8080/api/alerts?userId=GUID_DO_USUARIO&alertType=Temperature
+
+
+======================================
+
+Scripts utilizados no vídeo de DevOps:
+
+##Criar imagem com o Dockerfile
+docker build -t safecap-api .
+
+##Criar container da imagem do projeto
+docker run -d \
+  --name safecap-api \
+  -p 8080:8080 \
+  --env-file ./SafeCap/.env \
+  safecap-api
+
+##Criar container usando imagem do oracle no dockerhub
+docker run -d \
+  --name oracle-db \
+  -p 1521:1521 \
+  -e ORACLE_PASSWORD=290406 \
+  -v oracle_data:/opt/oracle/oradata \
+  gvenzl/oracle-xe
+
+##Verificar logs dos containers
+docker logs -f oracle-db
+docker logs -f safecap-api
