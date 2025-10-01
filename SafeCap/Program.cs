@@ -1,4 +1,4 @@
-using DotNetEnv;
+//using DotNetEnv;
 using Microsoft.OpenApi.Models;
 using SafeCap.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
@@ -7,7 +7,7 @@ using SafeCap.Application.Mappings;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-Env.Load();
+//Env.Load();
 
 builder.Services.AddAutoMapper(typeof(UserMapping));
 builder.Services.AddAutoMapper(typeof(SensorReadingMapping));
@@ -31,10 +31,12 @@ builder.Services.AddSwaggerGen(swagger =>
     });
 });
 
-var oracleConnectionString = Environment.GetEnvironmentVariable("ORACLE_CONNECTION_STRING");
+//var oracleConnectionString = Environment.GetEnvironmentVariable("ORACLE_CONNECTION_STRING");
 
 builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseOracle(oracleConnectionString));
+{
+    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+});
 
 builder.WebHost.ConfigureKestrel(options =>
 {

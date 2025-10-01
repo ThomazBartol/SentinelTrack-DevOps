@@ -15,9 +15,9 @@ namespace SafeCap.Migrations
                 name: "SC_Users",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "RAW(16)", nullable: false),
-                    Name = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
-                    Email = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Email = table.Column<string>(type: "nvarchar(max)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -28,11 +28,11 @@ namespace SafeCap.Migrations
                 name: "SC_Alerts",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "RAW(16)", nullable: false),
-                    UserId = table.Column<Guid>(type: "RAW(16)", nullable: false),
-                    AlertType = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
-                    Message = table.Column<string>(type: "NVARCHAR2(2000)", nullable: false),
-                    Timestamp = table.Column<DateTime>(type: "TIMESTAMP(7)", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AlertType = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Message = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -49,12 +49,12 @@ namespace SafeCap.Migrations
                 name: "SC_SensorReadings",
                 columns: table => new
                 {
-                    Id = table.Column<Guid>(type: "RAW(16)", nullable: false),
-                    UserId = table.Column<Guid>(type: "RAW(16)", nullable: false),
-                    Temperature = table.Column<float>(type: "BINARY_FLOAT", nullable: false),
-                    Humidity = table.Column<float>(type: "BINARY_FLOAT", nullable: false),
-                    Light = table.Column<float>(type: "BINARY_FLOAT", nullable: false),
-                    Timestamp = table.Column<DateTime>(type: "TIMESTAMP(7)", nullable: false)
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Temperature = table.Column<float>(type: "real", nullable: true),
+                    Humidity = table.Column<float>(type: "real", nullable: true),
+                    Light = table.Column<float>(type: "real", nullable: true),
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
