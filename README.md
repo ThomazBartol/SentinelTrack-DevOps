@@ -224,13 +224,15 @@ git push azure main
 
 ### Scripts SQL para alterações diretamente no banco
 
---ver todas as tabelas
+--ver todas as tabelas:
+
 SELECT TABLE_SCHEMA, TABLE_NAME
 FROM INFORMATION_SCHEMA.TABLES
 WHERE TABLE_TYPE = 'BASE TABLE'
 ORDER BY TABLE_SCHEMA, TABLE_NAME;
 
---insert na tabela de Alertas
+--insert na tabela de Alertas:
+
 INSERT INTO SC_Alerts (Id, UserId, AlertType, Message, Timestamp)
 VALUES (NEWID(), 
         '3fa85f64-5717-4562-b3fc-2c963f66afa6', 
@@ -238,13 +240,15 @@ VALUES (NEWID(),
         'string',
     '2025-10-01T23:30:56.628Z');
 
---update na tabela de Alertas
+--update na tabela de Alertas:
+
 UPDATE SC_Alerts
 SET Message = 'Nova mensagem',
     AlertType = 'novo_tipo'
 WHERE UserId = '3fa85f64-5717-4562-b3fc-2c963f66afa6';
 
---delete na tabela de Alertas
+--delete na tabela de Alertas:
+
 UPDATE SC_Alerts
 WHERE UserId = '3fa85f64-5717-4562-b3fc-2c963f66afa6';
 
