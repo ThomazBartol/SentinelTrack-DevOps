@@ -1,7 +1,98 @@
-# SafeCap API
+# SentinelTrack API
 
-**SafeCap** é uma API REST desenvolvida em .NET 8 com Entity Framework Core e banco de dados Oracle, desenvolvida como parte da Global Solution do primeiro semestre de 2025.
+**SentinelTrack** é uma API REST desenvolvida em .NET 8 com Entity Framework Core e banco de dados SQL Server em nuvem.
 Essa API consiste em gerenciar Usuários, Leituras feitas por sensores em nossos SafeCaps (Bonés Inteligentes), e também Alertas baseados nessas leituras.
+
+Nossa solução ajuda a previnir acidentes por desastres climaticos, controlando o nível de humidade, temperatura e luminosidade, alertando os usuários quando
+esses níveis pudessem atingir valores prejudiciais.
+
+---
+
+## Passo a passo para fazer o deploy
+
+### Criando o resource group
+az group create \
+  --name "rg-sentineltrack" \
+  --location "eastus2"
+
+### Criando Servidor SQL
+az sql server create \
+  --name "server-sentineltrack" \
+  --resource-group "rg-sentineltrack" \
+  --location "eastus2" \
+  --admin-user "sqladmin" \
+  --admin-password "AzureDb123"
+
+### Criando o banco de dados Azure SQL
+az sql db create \
+  --resource-group "rg-sentineltrack" \
+  --server "server-sentineltrack" \
+  --name "db-sentineltrack" \
+  --service-objective S0
+
+### Permitindo o WebApp acessar o banco
+az sql server firewall-rule create \
+  --resource-group "rg-sentineltrack" \
+  --server "server-sentineltrack" \
+  --name AllowAzureIps \
+  --start-ip-address 0.0.0.0 \
+  --end-ip-address 0.0.0.0
+
+### Criando o App Service Plan
+az appservice plan create \
+  --name "plan-sentineltrack" \
+  --resource-group "rg-sentineltrack" \
+  --sku F1
+
+### Criando o Web App de fato com Dotnet
+az webapp create \
+  --resource-group "rg-sentineltrack" \
+  --plan "plan-sentineltrack" \
+  --name "app-sentineltrack" \
+  --runtime "dotnet:8"
+
+### Conection String
+CONNECTION_STRING="Server=tcp:server-sentineltrack.database.windows.net,1433;Initial Catalog=db-sentineltrack;Persist Security Info=False;User ID=sqladmin;Password=AzureDb123;MultipleActiveResultSets=False;Encrypt=True;TrustServerCertificate=False;Connection Timeout=30;"
+
+### Inserindo a Conection String
+az webapp config connection-string set \
+  --resource-group "rg-sentineltrack" \
+  --name "app-sentineltrack" \
+  --settings DefaultConnection="$CONNECTION_STRING" \
+  --connection-string-type SQLAzure
+
+### Aplicando as configs
+az webapp deployment source config \
+    --name app-sentineltrack \
+    --resource-group rg-sentineltrack \
+    --repo-url https://$app-sentineltrack@app-sentineltrack.scm.azurewebsites.net/app-sentineltrack.git \
+    --branch main \
+    --manual-integration
+
+### Permitindo o ip para edição no banco
+az sql server firewall-rule create \
+    --resource-group rg-sentineltrack \
+    --server server-sentineltrack \
+    --name AllowMyIP \
+    --start-ip-address {seu ip} \
+    --end-ip-address {seu ip}
+
+### Criando as tabelas
+dotnet ef database update
+
+### Fazer o deploy de fato
+git remote add azure https://$app-sentineltrack@app-sentineltrack.scm.azurewebsites.net/app-sentineltrack.git
+
+### Vendo o user e senha
+az webapp deployment list-publishing-profiles \
+  --resource-group "rg-sentineltrack" \
+  --name "app-sentineltrack" \
+  --output table
+
+### Fazendo o Push
+git push azure main
+
+---
 
 ## Rotas Disponíveis
 
@@ -72,10 +163,13 @@ Essa API consiste em gerenciar Usuários, Leituras feitas por sensores em nossos
    git clone https://github.com/ThomazBartol/SafeCapAPI.git
    cd SafeCapAPI/
 
-2. Crie dentro da pasta SafeCap (no mesmo diretório que o .csproj):
-    arquivo .env contendo:
+2. Restore as dependências com:
    ```bash
-   ORACLE_CONNECTION_STRING=User Id={usuário};Password={senha};Data Source=oracle.fiap.com.br:1521/ORCL
+   dotnet restore
+
+3. Faça o build da aplicação com:
+   ```bash
+   dotnet build   
 
 4. Rode o projeto com o comando:
    ```bash
