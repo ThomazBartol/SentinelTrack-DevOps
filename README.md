@@ -182,19 +182,19 @@ git push azure main
 
 ## Comandos e Scripts Testes da API
 
-###Json para POST de Usuário:
+### Json para POST de Usuário:
 {
     "name": "UsuarioPadrao",
     "email": "user@example.com"
 }
 
-###Json para PUT de Usuário:
+### Json para PUT de Usuário:
 {
   "name": "UsuarioAtualizado",
   "email": "user@example.com"
 }
 
-###Json para POST de Leituras do Sensor:
+### Json para POST de Leituras do Sensor:
 {
   "userId": "679e0ef4-a2e1-4a19-d6d3-08de0141bbb4",
   "temperature": 12,
@@ -202,27 +202,27 @@ git push azure main
   "light": 32
 }
 
-###Json para PUT de Leituras do Sensor:
+### Json para PUT de Leituras do Sensor:
 {
   "temperature": 10,
   "humidity": 15,
   "light": 32
 }
 
-###Json para POST de Alertas:
+### Json para POST de Alertas:
 {
   "userId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
   "alertType": "string",
   "message": "string"
 }
 
-###Json para PUT de Alertas:
+### Json para PUT de Alertas:
 {
   "alertType": "Temperatura",
   "message": "Temperatura acima do comum"
 }
 
-###Scripts SQL para alterações diretamente no banco
+### Scripts SQL para alterações diretamente no banco
 
 --ver todas as tabelas
 SELECT TABLE_SCHEMA, TABLE_NAME
