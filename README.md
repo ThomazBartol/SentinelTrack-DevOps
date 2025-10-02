@@ -178,10 +178,79 @@ git push azure main
 5. Caso o Swagger não abra sozinho acesse em:
    http://localhost:8080/swagger/index.html
 
-## Comandos e Scripts Testes da API
-Na raiz do projeto, você encontrará o arquivo comandos-teste.txt com todos os comandos para testar a API além dos scripts de uso do dockerfile.
+---
 
-## Diagrama de Classes
+## Comandos e Scripts Testes da API
+
+###Json para POST de Usuário:
+{
+    "name": "UsuarioPadrao",
+    "email": "user@example.com"
+}
+
+###Json para PUT de Usuário:
+{
+  "name": "UsuarioAtualizado",
+  "email": "user@example.com"
+}
+
+###Json para POST de Leituras do Sensor:
+{
+  "userId": "679e0ef4-a2e1-4a19-d6d3-08de0141bbb4",
+  "temperature": 12,
+  "humidity": 43,
+  "light": 32
+}
+
+###Json para PUT de Leituras do Sensor:
+{
+  "temperature": 10,
+  "humidity": 15,
+  "light": 32
+}
+
+###Json para POST de Alertas:
+{
+  "userId": "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+  "alertType": "string",
+  "message": "string"
+}
+
+###Json para PUT de Alertas:
+{
+  "alertType": "Temperatura",
+  "message": "Temperatura acima do comum"
+}
+
+###Scripts SQL para alterações diretamente no banco
+
+--ver todas as tabelas
+SELECT TABLE_SCHEMA, TABLE_NAME
+FROM INFORMATION_SCHEMA.TABLES
+WHERE TABLE_TYPE = 'BASE TABLE'
+ORDER BY TABLE_SCHEMA, TABLE_NAME;
+
+--insert na tabela de Alertas
+INSERT INTO SC_Alerts (Id, UserId, AlertType, Message, Timestamp)
+VALUES (NEWID(), 
+        '3fa85f64-5717-4562-b3fc-2c963f66afa6', 
+        'string', 
+        'string',
+    '2025-10-01T23:30:56.628Z');
+
+--update na tabela de Alertas
+UPDATE SC_Alerts
+SET Message = 'Nova mensagem',
+    AlertType = 'novo_tipo'
+WHERE UserId = '3fa85f64-5717-4562-b3fc-2c963f66afa6';
+
+--delete na tabela de Alertas
+UPDATE SC_Alerts
+WHERE UserId = '3fa85f64-5717-4562-b3fc-2c963f66afa6';
+
+---
+
+## Desenho da Arquitetura
 
 <img src="diagrams/img/diagram.png" alt="Class Diagram" width="400"/>
 
