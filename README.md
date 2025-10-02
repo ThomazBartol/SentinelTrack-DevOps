@@ -249,7 +249,7 @@ WHERE UserId = '3fa85f64-5717-4562-b3fc-2c963f66afa6';
 
 --delete na tabela de Alertas:
 
-UPDATE SC_Alerts
+DELETE SC_Alerts
 WHERE UserId = '3fa85f64-5717-4562-b3fc-2c963f66afa6';
 
 ---
